@@ -1,0 +1,31 @@
+_pos = _this select 0;
+
+hint "";
+_mrkr="check";
+_mrkr setMarkerPos _pos;
+_mrkr setMarkerType "unknown";
+_mrkr setMarkerColor "colorblack";
+
+_p=getpos player;
+if(func=="nearestRoad")then{ _p = _pos}else{_p=[_pos]};
+
+_result = call format ["%1 call EXT_fnc_%2",_p,func];
+
+if(func=="nearestRoad")then{ if(!isNull _result)then{_result = getPos _result}else{_result = []}}
+
+player globalchat format ["_result: %1",_result];
+
+testDone = true;
+
+?(func=="inForest" || func=="inForest_real"): if(_result)then{_mrkr setMarkerColor "colorGreen"}else{_mrkr setMarkerColor "colorRed"}; hint format ["RESULT\n%1",if(_result)then{"In forest"}else{"Not in a forest"}]; exit;
+
+?(count _result<1): hint format ["RESULT\nNo %1 was found!",mrkrName]; _mrkr setMarkerColor "colorRed"; exit;
+
+_mrkr setMarkerColor "colorGreen";
+
+_mrkr=format["%1pos",mrkrName];
+_mrkr setMarkerPos _result;
+_mrkr setMarkerType "marker";
+_mrkr setMarkerColor "colorBlue";
+hint format ["RESULT\n%1 found!",mrkrName];
+exit;

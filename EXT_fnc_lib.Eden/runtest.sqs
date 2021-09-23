@@ -1,0 +1,27 @@
+_type = _this select 0;
+
+?(!testDone): hint "ERROR\nWait until the current test is finished!"; exit;
+testDone = false;
+
+func="";mrkrName="";
+?(_type=="road"): func="nearestRoad";mrkrName="road";
+?(_type=="water"): func="findWater";mrkrName="water";
+?(_type=="land"): func="findLand";mrkrName="land";
+?(_type=="Shore"): func="findShore";mrkrName="Shore";
+?(_type=="flat"): func="findFlatArea";mrkrName="flat";
+?(_type=="forest"): func="inForest";mrkrName="forest";
+?(_type=="safe"): func="findSafePos";mrkrName="safe";
+?(_type=="highestpos"): func="highestPos";mrkrName="highest";
+?(_type=="lowestpos"): func="lowestPos";mrkrName="lowest";
+?(func==""): hint "ERROR\nRequested test isn't valid!"; exit;
+
+_mrkrs=["check","roadpos","waterpos","landpos","Shorepos","flatpos","forestpos","safepos","highestpos","lowestpos"];
+{_x setMarkerType "empty"}forEach _mrkrs;
+
+_mrkri=1;while{_mrkri<500}do{format["pos_%1",_mrkri] call EXT_fnc_hideMarker;_mrkri=_mrkri+1};
+
+onMapSingleClick {[_pos] exec "result.sqs";onMapSingleClick "";};
+
+hint format ["HELP\n1) Open the map\n2) Click on the spot you want to run the %1 test",mrkrName];
+
+exit;

@@ -1,0 +1,52 @@
+~1
+_path="EXT_fnc_lib\";
+[_path] call loadfile format["%1loadlib.sqf",_path];
+
+hint "HELP\nUse the radio to select one of the tests";
+
+testDone = true;
+
+_mrkrs=["check","roadpos","waterpos","landpos","shorepos","flatpos","forestpos","safepos","highestpos","lowestpos"];
+{_x setMarkerType "empty"}forEach _mrkrs;
+
+_mrkri=1;while{_mrkri<500}do{format["pos_%1",_mrkri] call EXT_fnc_hideMarker;_mrkri=_mrkri+1};
+
+_id=56829;
+_id=3786;
+_id=3783;
+_id=21014; comment{tree};
+;_isForest=(object _id) call EXT_fnc_isForestChunk; player globalchat format["forest? %1",_isForest];
+
+exit;
+
+#looproad
+_onRoad=(player) call EXT_fnc_isOnRoad; player globalchat format["road? %1",_onRoad];
+~1
+camdestroy roadspot
+goto "looproad";
+
+
+exit;
+
+[b1,[getpos b1 select 0, getpos b1 select 1, 4]] call EXT_fnc_setPosATL;
+[b2,[getpos b1 select 0, getpos b1 select 1, 6.1]] call EXT_fnc_setPosATL;
+~0.5
+;player globalchat format["r:%1",[player,w1] call EXT_fnc_relativeDirTo];
+;player globalchat format["atl:%1  asl:%2  normal:%3  e:%4",(b1 call EXT_fnc_getPosATL)select 2,(getposasl b1)select 2, (getpos b1)select 2, (getpos b1) call EXT_fnc_getTerrainHeightASL];
+
+[b3,[getpos b3 select 0, getpos b3 select 1, 1]] call EXT_fnc_setPosATL;
+;player globalchat format["r:%1",(b3 call EXT_fnc_getPosATL) select 2];
+
+b4 setPosASL [getposasl b4 select 0, getposasl b4 select 1, (getposasl b4 select 2)+ 1.5];
+;player globalchat format["r:%1",(getpos b4) select 2];
+
+exit;
+
+#loop
+"safepos" call EXT_fnc_hideMarker;
+_p=[getpos vehicle player,5,50,10,0,2.5,0,0] call EXT_fnc_findSafePos;
+?(count _p>0): ["safepos",_p,"marker","blue",[0.8,0.8]] call EXT_fnc_showMarker;
+~2
+goto "loop";
+
+exit;
